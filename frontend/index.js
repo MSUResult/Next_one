@@ -9,18 +9,24 @@ import courseRouter from "./routes/courseRoute.js";
 import paymentRouter from "./routes/paymentRoute.js";
 import aiRouter from "./routes/aiRoute.js";
 import reviewRouter from "./routes/reviewRoute.js";
+
 dotenv.config();
 
-let port = process.env.PORT;
-let app = express();
+const port = process.env.PORT || 3000;
+const app = express();
+
 app.use(express.json());
 app.use(cookieParser());
+
+// ✅ Allow both localhost and Vercel frontend
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173", "https://frontendlms-three.vercel.app"],
     credentials: true,
   })
 );
+
+// ✅ Routes
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/course", courseRouter);
@@ -33,6 +39,6 @@ app.get("/", (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log("Server Started");
+  console.log(`✅ Server running on port ${port}`);
   connectDb();
 });
